@@ -106,6 +106,16 @@ bool publishJointTF(ros::NodeHandle& nh, tf::TransformBroadcaster& br, std::stri
 	  frame_id_stream << "/" << tf_prefix << "/user_" << uid << "/" << j_name;
 	  frame_id = frame_id_stream.str();
 	  // std::cout << frame_id << std::endl;
+	  
+	  // Frame rotation, same as original openni_tracker version
+	  tf::Transform change_frame;
+	  change_frame.setOrigin(tf::Vector3(0, 0, 0));
+	  tf::Quaternion frame_rotation;
+	  frame_rotation.setEulerZYX(1.5708, 0, 1.5708);
+	  change_frame.setRotation(frame_rotation);
+
+	  transform = change_frame * transform;
+		
 	  br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), relative_frame, frame_id));
 	}
 	return true;
